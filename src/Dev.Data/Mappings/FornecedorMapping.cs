@@ -22,7 +22,7 @@ namespace Dev.Data.Mappings
             builder.HasOne(f => f.Endereco)
                 .WithOne(e => e.Fornecedor);
 
-            //1 : N => Fornecedor : Endereco
+            //1 : N => Fornecedor : Produtos
             builder.HasMany(f => f.Produtos)
                 .WithOne(p => p.Fornecedor)
                 .HasForeignKey(p => p.FornecedorId);

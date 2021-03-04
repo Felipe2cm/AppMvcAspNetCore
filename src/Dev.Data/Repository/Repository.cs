@@ -25,7 +25,7 @@ namespace Dev.Data.Repository
         public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
         {
             return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
-        }        
+        }
 
         public virtual async Task<TEntity> ObterPorId(Guid id)
         {
@@ -34,7 +34,7 @@ namespace Dev.Data.Repository
 
         public virtual async Task<List<TEntity>> ObterTodos()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task Adicionar(TEntity entity)
@@ -45,7 +45,8 @@ namespace Dev.Data.Repository
 
         public virtual async Task Atualizar(TEntity entity)
         {
-            DbSet.Update(entity);
+            //DbSet.Update(entity).State = EntityState.Modified;
+            DetachLocal(entity, entity.Id);
             await SaveChanges();
         }
 
@@ -63,6 +64,18 @@ namespace Dev.Data.Repository
         public void Dispose()
         {
             Db?.Dispose();
+        }
+
+        public void DetachLocal(TEntity t, Guid Id)
+        {
+            var local = DbSet
+                .Local
+                .FirstOrDefault(entry => entry.Id == Id);
+            if (local != null)
+            {
+                Db.Entry(local).State = EntityState.Detached;
+            }
+            Db.Entry(t).State = EntityState.Modified;
         }
     }
 }
