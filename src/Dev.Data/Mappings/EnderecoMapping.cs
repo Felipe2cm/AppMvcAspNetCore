@@ -38,7 +38,6 @@ namespace Dev.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(50)");
 
-
             builder.ToTable("Enderecos");
         }
     }
