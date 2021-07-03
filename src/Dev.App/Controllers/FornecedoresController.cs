@@ -59,7 +59,11 @@ namespace Dev.App.Controllers
 
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
             await _fornecedorService.Adicionar(fornecedor);
-                          
+
+            if (!OperacaoValida()) return View(fornecedorViewModel);
+
+            TempData["Sucesso"] = "Fornecedor salvo com sucesso.";
+
             return RedirectToAction("Index");
            
         }
@@ -90,6 +94,10 @@ namespace Dev.App.Controllers
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
             await _fornecedorService.Atualizar(fornecedor);
 
+            if (!OperacaoValida()) return View(await ObterFornecedorProdutosEndereco(id));
+
+            TempData["Sucesso"] = "Fornecedor salvo com sucesso.";
+
             return RedirectToAction(nameof(Index));                        
         }
 
@@ -117,6 +125,10 @@ namespace Dev.App.Controllers
             
             await _fornecedorService.Remover(id);
 
+            if (!OperacaoValida()) return View(fornecedorViewModel);
+
+            TempData["Sucesso"] = "Fornecedor excluído com sucesso.";
+
             return RedirectToAction("Index");
         }
 
@@ -133,16 +145,18 @@ namespace Dev.App.Controllers
         [Route("atualizar-endereco-fornecedor/{id:guid}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AtualizarEndereco(FornecedorViewModel fornecedor)
+        public async Task<IActionResult> AtualizarEndereco(FornecedorViewModel fornecedorViewModel)
         {
             ModelState.Remove("Nome");
             ModelState.Remove("Documento");
 
-            if (!ModelState.IsValid) return PartialView("_AtualizarEndereco", new FornecedorViewModel { Endereco = fornecedor.Endereco });
+            if (!ModelState.IsValid) return PartialView("_AtualizarEndereco", new FornecedorViewModel { Endereco = fornecedorViewModel.Endereco });
 
-            await _fornecedorService.AtualizarEndereco(_mapper.Map<Endereco>(fornecedor.Endereco));
+            await _fornecedorService.AtualizarEndereco(_mapper.Map<Endereco>(fornecedorViewModel.Endereco));
 
-            var url = Url.Action("ObterEndereco", "Fornecedores", new { id = fornecedor.Endereco.FornecedorId });
+            if (!OperacaoValida()) return PartialView("_AtualizarEndereco", fornecedorViewModel);
+
+            var url = Url.Action("ObterEndereco", "Fornecedores", new { id = fornecedorViewModel.Endereco.FornecedorId });
 
             return Json(new { success = true, url });
         }
