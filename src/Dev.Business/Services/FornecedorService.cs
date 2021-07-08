@@ -26,7 +26,7 @@ namespace Dev.Business.Services
         {
             // Validar o estado da entidade!
             if (!ExecutarValidacao(new FornecedorValidation(), fornecedor) 
-                && !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) return;
+                || !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) return;
 
             //Validar se o documento já existe
               if (_fornecedorRepository.Buscar(f => f.Documento == fornecedor.Documento).Result.Any()) return;
@@ -63,8 +63,11 @@ namespace Dev.Business.Services
                 return;
             }
 
+
+            await _enderecoRepository.Remover(_enderecoRepository.ObterEnderecoPorFornecedor(id).Result.Id);
             await _fornecedorRepository.Remover(id);
         }
+
         public void Dispose()
         {        
             _fornecedorRepository?.Dispose();

@@ -71,7 +71,9 @@ namespace Dev.App.Controllers
             produtoViewModel.Imagem = imgPrefixo + produtoViewModel.ImagemUpload.FileName;
             await _produtoService.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
-            if(!OperacaoValida()) return View(produtoViewModel);            
+            if(!OperacaoValida()) return View(produtoViewModel);
+
+            TempData["Sucesso"] = "Produto salvo com sucesso.";
 
             return RedirectToAction("Index");
         }
@@ -119,6 +121,8 @@ namespace Dev.App.Controllers
 
             if (!OperacaoValida()) return View(produtoViewModel);
 
+            TempData["Sucesso"] = "Produto salvo com sucesso.";
+
             return RedirectToAction("Index");                        
         }
 
@@ -144,6 +148,8 @@ namespace Dev.App.Controllers
             await _produtoService.Remover(id);
 
             if (!OperacaoValida()) return View(produtoViewModel);
+
+            TempData["Sucesso"] = "Produto excluido com sucesso.";
 
             return RedirectToAction("Index");
         }
