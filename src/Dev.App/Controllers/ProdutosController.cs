@@ -62,8 +62,7 @@ namespace Dev.App.Controllers
 
         [ClaimsAuthirize("Produto", "Adicionar")]
         [Route("novo-produto")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]        
         public async Task<IActionResult> Create(ProdutoViewModel produtoViewModel)
         {
             produtoViewModel = await PopularFornecedores(produtoViewModel);
@@ -98,8 +97,7 @@ namespace Dev.App.Controllers
 
         [ClaimsAuthirize("Produto", "Editar")]
         [Route("editar-produto/{id:Guid}")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]        
         public async Task<IActionResult> Edit(Guid id, ProdutoViewModel produtoViewModel)
         {
             if (id != produtoViewModel.Id) return NotFound();
@@ -148,8 +146,7 @@ namespace Dev.App.Controllers
 
         [ClaimsAuthirize("Produto", "Excluir")]
         [Route("excluir-produto/{id:Guid}")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete")]        
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var produtoViewModel = await ObterProduto(id);

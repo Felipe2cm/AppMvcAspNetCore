@@ -61,8 +61,8 @@
                         @Model.Endereco.Estado
                     </td>
                     <td>
-                        <a asp-action="AtualizarEndereco" asp-route-id="@Model.Id" class="btn btn-info" data-modal="">
-                            <span title="Editar" class="fa fa-pencil-alt" title="Editar"></span>
+                        <a supress-by-action="Edit,ObterEndereco" asp-action="AtualizarEndereco" asp-route-id="@Model.Id" class="btn btn-info" data-modal="">
+                            <span title="Editar" class="fa fa-pencil-alt"></span>
                         </a>
                     </td>
                 </tr>
